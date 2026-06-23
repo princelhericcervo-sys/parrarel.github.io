@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HashToolXg · DoxBin</title>
+    <style>
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background:#000;
+            color:#00ff41;
+            font-family:'Courier New',monospace;
+            padding:20px;
+            min-height:100vh;
+            background-image: 
+                radial-gradient(ellipse at 10% 20%, rgba(0,255,65,0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 90% 80%, rgba(0,255,65,0.03) 0%, transparent 50%);
+        }
+        .container { max-width:800px; margin:0 auto; }
+        
+        .header { 
+            text-align:center; 
+            border-bottom:2px solid #00ff41; 
+            padding-bottom:10px; 
+            margin-bottom:20px;
+            box-shadow: 0 0 30px rgba(0,255,65,0.1);
+        }
+        .header h1 { 
+            color:#00ff41; 
+            font-size:36px; 
+            letter-spacing:8px; 
+            text-shadow: 0 0 20px #00ff41, 0 0 40px rgba(0,255,65,0.3);
+            animation: glitch 3s infinite;
+        }
+        @keyframes glitch {
+            0%, 90%, 100% { opacity:1; }
+            92% { opacity:0.8; text-shadow: 2px 0 #ff0000, -2px 0 #00ff41; }
+            94% { opacity:1; text-shadow: -2px 0 #ff0000, 2px 0 #00ff41; }
+        }
+        .header h1 span { color:#ff0040; text-shadow: 0 0 20px #ff0040, 0 0 40px rgba(255,0,64,0.3); }
+        .header p { color:#00cc33; font-size:13px; letter-spacing:2px; }
+        .header .sub { color:#008822; font-size:11px; }
+        
+        .card { 
+            background:rgba(0,20,10,0.85); 
+            border:1px solid #00ff41; 
+            padding:18px; 
+            border-radius:6px; 
+            margin-bottom:16px;
+            box-shadow: 0 0 20px rgba(0,255,65,0.05), inset 0 0 20px rgba(0,255,65,0.02);
+        }
+        .card h3 { 
+            color:#00ff41; 
+            border-bottom:1px dashed #00ff41; 
+            padding-bottom:6px; 
+            margin-bottom:12px;
+            text-shadow: 0 0 10px rgba(0,255,65,0.2);
+        }
+        .row { display:flex; gap:10px; margin:8px 0; flex-wrap:wrap; align-items:center; }
+        .row label { min-width:100px; color:#00cc33; }
+        input, select, button { 
+            background:#001a0a; 
+            border:1px solid #00ff41; 
+            color:#00ff41; 
+            padding:8px 12px; 
+            border-radius:4px; 
+            font-family:inherit; 
+            font-size:14px;
+            box-shadow: 0 0 10px rgba(0,255,65,0.05);
+        }
+        input { flex:1; min-width:200px; }
+        input:focus { outline:none; border-color:#00ff41; box-shadow: 0 0 20px rgba(0,255,65,0.15); }
+        button { 
+            background:#001a0a; 
+            cursor:pointer; 
+            padding:8px 20px;
+            transition: all 0.3s;
+        }
+        button:hover { 
+            background:#00ff41; 
+            color:#000; 
+            box-shadow: 0 0 30px rgba(0,255,65,0.3);
+        }
+        button:disabled { opacity:0.4; cursor:not-allowed; }
+        
+        .output { 
+            background:#000a05; 
+            padding:12px; 
+            border-radius:4px; 
+            border-left:3px solid #00ff41; 
+            white-space:pre-wrap; 
+            font-size:13px; 
+            min-height:120px;
+            color:#00ff41;
+            box-shadow: inset 0 0 30px rgba(0,255,65,0.02);
+            font-weight:bold;
+        }
+        
+        .footer { 
+            text-align:center; 
+            border-top:1px solid #00ff41; 
+            padding-top:12px; 
+            margin-top:20px; 
+            font-size:12px; 
+            color:#008822; 
+        }
+        .status-dot { 
+            display:inline-block; 
+            width:8px; 
+            height:8px; 
+            border-radius:50%; 
+            background:#00ff41; 
+            margin-right:6px;
+            box-shadow: 0 0 10px #00ff41;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity:1; }
+            50% { opacity:0.3; }
+        }
+        
+        .platform-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin:8px 0; }
+        .platform-grid button { 
+            background:#001a0a; 
+            border:1px solid #00ff41; 
+            padding:6px; 
+            border-radius:4px; 
+            color:#00cc33; 
+            cursor:pointer; 
+            transition: all 0.3s;
+        }
+        .platform-grid button:hover { 
+            background:#00ff41; 
+            color:#000; 
+            box-shadow: 0 0 20px rgba(0,255,65,0.2);
+        }
+        .platform-grid button.active { 
+            background:#00ff41; 
+            color:#000; 
+            border-color:#00ff41;
+            box-shadow: 0 0 30px rgba(0,255,65,0.3);
+        }
+        
+        .progress-bar { 
+            width:100%; 
+            height:4px; 
+            background:#001a0a; 
+            margin-top:8px; 
+            border-radius:2px; 
+            overflow:hidden; 
+            display:none; 
+            border:1px solid #00ff41;
+        }
+        .progress-bar.active { display:block; }
+        .progress-fill { 
+            height:100%; 
+            width:0%; 
+            background:#00ff41; 
+            transition:width 0.3s;
+            box-shadow: 0 0 20px #00ff41;
+        }
+        
+        ::selection { background:#00ff41; color:#000; }
+
+        .banner-ascii {
+            color:#00ff41;
+            font-size:11px;
+            line-height:1.2;
+            text-align:center;
+            text-shadow: 0 0 10px rgba(0,255,65,0.1);
+            letter-spacing:1px;
+            margin-bottom:4px;
+        }
+        .banner-ascii span { color:#ff0040; text-shadow: 0 0 10px rgba(255,0,64,0.2); }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <div class="banner-ascii">
+╔══════════════════════════════════════════════════════════════╗<br>
+║                                                                  ║<br>
+║     <span>███████</span>╗<span>████████</span>╗<span>███████</span>╗<span>██████</span>╗  <span>█████</span>╗  <span>██████</span>╗     ║<br>
+║     <span>██</span>╔════╝╚══<span>██</span>╔══╝<span>██</span>╔════╝<span>██</span>╔══<span>██</span>╗<span>██</span>╔══<span>██</span>╗<span>██</span>╔════╝     ║<br>
+║     <span>███████</span>╗   <span>██</span>║   <span>█████</span>╗  <span>██████</span>╔╝<span>███████</span>║<span>██</span>║  <span>███</span>╗    ║<br>
+║     ╚════<span>██</span>║   <span>██</span>║   <span>██</span>╔══╝  <span>██</span>╔══<span>██</span>╗<span>██</span>╔══<span>██</span>║<span>██</span>║   <span>██</span>║    ║<br>
+║     <span>███████</span>║   <span>██</span>║   <span>███████</span>╗<span>██</span>║  <span>██</span>║<span>██</span>║  <span>██</span>║╚<span>██████</span>╔╝    ║<br>
+║     ╚══════╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚═════╝     ║<br>
+║                                                                  ║<br>
+║              Tool Created by <span>StepXG</span>                        ║<br>
+╚══════════════════════════════════════════════════════════════════╝
+        </div>
+        <p>═ DOXBIN · LEAK ARCHIVE · v4.0 ═</p>
+        <p class="sub">[+] 18,432 hashes indexed · 4,127 profiles</p>
+        <p class="sub" style="color:#006622;">█████████████████████████████████████████</p>
+    </div>
+
+    <div class="card">
+        <h3>📁 DOXBIN LOOKUP</h3>
+        <div class="row">
+            <label>USERNAME:</label>
+            <input type="text" id="doxInput" placeholder="Enter username" value="anonymous_x">
+        </div>
+        <div class="row">
+            <label>PLATFORM:</label>
+            <div class="platform-grid" id="platformGrid">
+                <button data-platform="TikTok">TIKTOK</button>
+                <button data-platform="Facebook">FACEBOOK</button>
+                <button data-platform="Twitter">TWITTER (X)</button>
+                <button data-platform="Telegram">TELEGRAM</button>
+            </div>
+        </div>
+        <div class="row">
+            <button id="doxBtn" style="flex:1;">▶ INITIATE SEQUENCE</button>
+        </div>
+        <div class="progress-bar" id="doxProgress"><div class="progress-fill" id="doxFill"></div></div>
+        <div class="output" id="doxOutput">[SYSTEM] READY</div>
+    </div>
+
+    <div class="footer">
+        <span class="status-dot"></span> 14 NODES ACTIVE · ENCRYPTED · TOR COMPATIBLE<br>
+        <span style="color:#006622;">HASHTOOLXG · STEPXG · 2026</span>
+    </div>
+</div>
+
+<script>
+    function randomIP() { return `${Math.floor(Math.random()*255)+1}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}.${Math.floor(Math.random()*255)}`; }
+
+    function generateDox(username, platform) {
+        return { username, platform, ip: randomIP() };
+    }
+
+    function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    async function runDoxLookup(outputEl, progressFill, username, platform) {
+        const btn = document.getElementById('doxBtn');
+        btn.disabled = true;
+        const progressBar = progressFill.parentElement;
+        progressBar.classList.add('active');
+
+        const statuses = [
+            "INITIALIZING DOXBIN ENGINE...",
+            "CONNECTING TO TOR NETWORK...",
+            "QUERYING LEAK DATABASE...",
+            "CROSS-REFERENCING HASHES...",
+            "EXTRACTING IP ADDRESS...",
+            "GENERATING REPORT..."
+        ];
+
+        let lines = [];
+        for(let i = 0; i < statuses.length; i++) {
+            lines.push(`[*] ${statuses[i]}`);
+            outputEl.textContent = lines.join('\n');
+            progressFill.style.width = Math.min((i + 1) / statuses.length * 85, 85) + '%';
+            await sleep(200 + Math.random() * 300);
+        }
+
+        progressFill.style.width = '100%';
+        await sleep(300);
+
+        const data = generateDox(username, platform);
+        const final = `[+] TARGET: ${data.username}
+[+] PLATFORM: ${data.platform}
+[+] IP ADDRESS: ${data.ip}
+[+] STATUS: LEAKED`;
+
+        outputEl.textContent = final;
+        progressBar.classList.remove('active');
+        btn.disabled = false;
+    }
+
+    let selectedPlatform = "TikTok";
+    document.querySelectorAll('#platformGrid button').forEach(btn => {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('#platformGrid button').forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            selectedPlatform = this.dataset.platform;
+        });
+    });
+    document.querySelector('#platformGrid button').classList.add('active');
+
+    document.getElementById('doxBtn').addEventListener('click', function() {
+        const username = document.getElementById('doxInput').value.trim() || "unknown";
+        const output = document.getElementById('doxOutput');
+        const fill = document.getElementById('doxFill');
+        runDoxLookup(output, fill, username, selectedPlatform);
+    });
+</script>
+</body>
+</html>
